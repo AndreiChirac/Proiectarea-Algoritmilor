@@ -1,0 +1,129 @@
+Andrei Chirac
+321CD
+
+----------------------------------Crypto----------------------------------------
+
+    For the first problem we have encounter the fact that Gigel wants to mine
+crypto currency so in order to do this he has N number of PC and each of them
+has a power and a cost if we want to upgrade it and produce one more coin. So
+our input data is based of N pairs (power, upgrade cost) and a budget. So what
+come across as an idea was the fact that event id we upgrade the PC's with a
+bigger power is useless because the currency is passed through all the computers
+so we need to sort our input in order to do this we will use heap sort because
+we know it can work well even with a lot of duplicates and has a complexity of
+O(nLogn). After we do this we know the minimum is the first element so from
+there we start updating(we subtract from our budget the cost, and we add one to
+the power of that PC) until the minimum doesn't correspond with our current
+element so we know we need to break in order not to waste time, after this we
+add one to our minimum that we first found and start reiterating until the
+budget is insufficient and at that point we know that not all the computers with
+the same power were upgraded so we return the minimum at that point.
+
+Complexity :          - Reading the files will take O(n)
+                      - In each of the three cases Best Worst and Average the
+                      complexity of the sorting algorithm is O(nLogn).
+                      - In the best case scenario the for we are using will
+                      provide a upgrade that is larger than the budget and will
+                      immediately return the minimum ,in worst case will iterate
+                      until the end when all the elements are the same, an on
+                      average will break after some time.
+                      - The while instruction is always true so its state of
+                      re-looping is based on how much is an upgrade and what is
+                      the budget so in the worst case Gigel's budget is quite
+                      large and the updates cost is 1 so the complexity will be
+                      budget
+                      - All things considered we will have O(number of pc) +
+                      O(numberPCLog(numberPC)) + O(budget * number of pc)
+
+
+Encountered Problems: - First of all i was searching everytime for the minimum
+                      without sorting
+                      - I was iterating through all pc even if the mismatch has
+                      appeared
+                      - Using the wrong sorting method
+
+----------------------------------Stocks----------------------------------------
+
+    The input that we read will be processed while reading we will store it in
+an arraylist od Investments that has the field currentValue that is the value
+that Gigel bought the shar, minValue that is the value of the loss if the stocks
+are  dropping in price (current value - dropped value) and maxValue that is the
+value of the profit that Gigel made (current value - raised value), we do this
+in order to save time.
+    The problem is very similar to a well known problem, Knapsack Problem, and
+we know this can be more efficiently solved by using dynamic programming. The
+problem is solved with a 2D array because it has only one restrain(the weight),
+in our case we have 2 restrains one of them is that we can not exceed Gigel's
+budget and the other one we encounter is the fact that we can only accept losses
+when buying stocks less then the limit loss so we have to use a 3D array. So we
+build the matrix like this [numberOfShares + 1][budget + 1][loss + 1] where
+numberOfShares is the number of Shares that Gigel can buy, budget can be
+correlated with the space of the sack, in our case is the budget that Gigel has
+and loss is the maximum loss that Gigel can accept in the worst case. Then we
+iterate with i,j,k where we consider i is the i-th share , j denotes the current
+budget spent on shares and k denotes the loss that Gigel has until now. For each
+of our matrix states we have only 2 options the profit obtained by Gigel is
+greater than the previous state or no . In the first case our current state will
+be the same as the previous, in the second one our current state will be the
+state before plus our new share's profit . So after integrating through all the
+states we will get on the las position our biggest profit
+
+Complexity :          - Reading the files will take O(Number of Shares)
+                      - Based on the fact that we have 3 * for instractions we
+                      will have O(Number of Shares * Budget * Loss)
+                      - Total O(Number of Shares) +
+                      O(Number of Shares * Budget * Loss)
+
+Encountered Problems: - I was using Backtracking
+                      - First of all i was using only a 2D array
+
+-----------------------------------Ridge----------------------------------------
+    In these problem we are able to determine that the maximum times that a
+mountain can be dug is 2 because we only check with the previous mountain and
+the next one. And if you think we will encounter a domino effect it is not
+possible. In order to solve the problem we create a matrix in witch rows
+represents the mountains and columns represents the digging , we store in the
+matrix the minimum cost required to make a mountain height distinct form the
+nearby mountains digging up once twice or not digging at all. We have to keep in
+mind the fact that we can not dig under the ground. The cost will be calculated
+number of diggings indicated by j time which is the cost per one dig plus
+minimum between the previous mountain cost of digging if the mountains height
+was the same.
+    In order to have a start we will write in our firs row of the matrix the
+cost for what happens if we don't dig the first mountain, we dig it once or
+twice, based on this we will develop our solutions.We take each mountain ad
+pretend not to dig from it, to dig once or twice and compare it's height with
+the previous mountain dug in the same manner, if we obtain the result we want
+(that the mountains don't have the same height) we will store the minimum
+base on which case we are , if we are in the case in which the height is not
+equal to previous height unchanged we will get the minimum between a very big
+number and the cost that corresponds with the previous mountain without
+diggings the same thing happens with the cases when we are digging once or
+twice.
+
+    Ex of checking
+FIRST MOUNTAIN WITHOUT ANY DIGGINGS APPLIED
+                        -> THE PREVIOUS MOUNTAIN WITHOUT ANY DIGGINGS APPLIED
+                        -> THE PREVIOUS MOUNTAIN DUG ONCE
+                        -> THE PREVIOUS MOUNTAIN DUG TWICE
+FIRST MOUNTAIN DUG ONCE
+                       -> THE PREVIOUS MOUNTAIN WITHOUT ANY DIGGINGS APPLIED
+                       -> THE PREVIOUS MOUNTAIN DUG ONCE
+                       -> THE PREVIOUS MOUNTAIN DUG TWICE
+FIRST MOUNTAIN DUG TWICE
+                       -> THE PREVIOUS MOUNTAIN WITHOUT ANY DIGGINGS APPLIED
+                       -> THE PREVIOUS MOUNTAIN DUG ONCE
+                       -> THE PREVIOUS MOUNTAIN DUG TWICE
+
+................................................................................
+................................................................................
+................................................................................
+
+Complexity :          - Reading the files will take O(number of mountains)
+                      - By using this method we will get linear time complexity
+                       Finding the minimum cost will get us a complexity of
+                       O(number of mountains)
+
+Encountered Problems: - I was building wrong the cases
+                      - Adding to Integer.MAX_VALUE caused minimum values that
+                      were interpreted as minimum costs

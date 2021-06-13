@@ -1,0 +1,156 @@
+Andrei Chirac
+321CD
+
+---------------------------------PODURI----------------------------------------
+
+	For the first problem, we have encountered the fact that Gigel is in a
+hard situation. He stands on a bridge above water, the place resembles a
+grid with N rows and M columns. Above this surface were built 3 types of
+bridges. 
+Because the surface is too large we couldn't afford to build bridges on each
+cell sp Gigel must find the shortest path to exit the grid.
+	After reading the problem I thought that this is a problem that must use a
+pathfinding algorithm so my initial gut was to use Dijkstra but I realized
+that to go from a cell to another the cost is only 1 so it is useless, so I
+remembered the "Rat in the maze" or"Shortest path in a Binary Maze" problems
+that can easily be solved with BFS. But there were some differences between our
+problem and those. They were the fact that we do not have a destination, we
+have to find the shortest way to exit the grid so instead of checking if the
+the current cell is the destination I was looking for the edges of the grid.
+	Another difference is the fact that we have different behavior for each
+bridge so it would be wrong to add some cells that can not be reached from the
+current point.
+	After this, I decided to start, so after reading the input data and store
+it in a dynamically allocated matrix I build two structures one of them
+is used to store the coordinates and the other one uses the previous
+structure and has a field that stores the distance from the start to the point
+where we are. I was conscious that I will need to make some checkings
+when we are on the edge of the grid, so I build a function that based on the
+bridge's model returns true if we can perform the exit and false if we can
+not. Further, I started the actual BFS algorithm. I build two arrays that are
+used to get the row and column of the 4 neighbors of a cell instead of doing
+it (x+1,y),(x-1,y),(x,y+1),(x,y-1), a queue in which we will store visited
+nodes, and a matrix in which we withhold if a position is visited or not.
+Before doing more verifications I checked If we are exactly on the edge and we
+can escape the greed we can end the program. I inserted my source node in the
+queue.
+	While the queue is not empty and we didn't find the solution we
+follow some steps : - we check if we have reached the edge of the grid an we
+ 					can exit we have anawnser.
+ 					- in case we didn't reach the edge we dequeue the front
+ 					cell in the queue            
+ 					- we need to enqueue the adjacent cells of the one that we
+ 				 	dequeued so in order to do this correctly we have to check
+					the bridge below us, if it is a bridge that allows us to
+					go either up or down we will store in our auxiliary
+					variables 0 and 2, these are the indexes of the arrays I
+					told you in the begining, if it is a bridge that allows us
+					to go either left or right we will store in our auxiliary
+					variables 2 and 4, and if it is a doouble bridge we will
+					store all of the neighbors.
+ 					- if the neighborn is not visirted and it is not empty we
+ 					enqueue it
+ 	In case the destination cannot be reached we return -1.
+
+Complexity :	- Reading the data takes N * M 
+				- In worst case BFS alghorithm takes N * M 
+				- So we will have N*M as final complexity
+				
+Encountered Problems: - First I was building the matrix like this 
+					  vector<vector<char>> matrix so I encountered some
+					  problems with the running time
+					  - First, if I was on the edge I didn't take into account
+					  that we must follow the bridge behavior and can not exit
+					  that easy.
+
+---------------------------------ADRESE----------------------------------------
+
+	Since I have read the problem I thought of using hashmaps in order to
+build a kind of adjacency list so I tried building them while I was
+reading, the map was based on a structure that contained a name and a 
+list, after building them I was searching comparing each address to find 
+the impostors, but I ran out of time so I decided to change some things. 
+I said I will build the map differently so I had the address as the key 
+and as a value, I had a set of all addresses but I was doing something 
+wrong because I didn't build them at the reading. After additional 
+thinking, I decided I need 3 hashmaps. I considered that each user has a 
+single main address (the first address that is given in the input ), the 
+others will be considered secondary addresses. All the secondary 
+addresses will indicate the main address of the user, and the main will 
+indicate at herself. These associations are stored in "points_to" and 
+"references". The first map makes associations between each address and 
+the main address, and the other one makes associations between the main 
+address and a vector of secondary addresses. In order to be able to store 
+the name of the user, I used another map adr_to_name which associates the
+main address with the user's name. The main idea is that each time we 
+encounter an address is one of the keys of the points_to hashmap, all of 
+the addresses that refer to this one have to be associated with the 
+value of the key from hashmap because we see that it belongs to a known 
+user. So the hashmaps are updated for all the addresses that were read 
+at that step. For sorting and displaying the result, I used a structure 
+that contains the name and a vector with all the addresses used by each 
+user.
+
+Complexity :	- Because I am doing everything based on the reading we will 
+				have a complexity of N * K^2
+
+Encountered Problems: - I did't figure out how to optimize the code in order
+ 					  to get all the points
+ 					  - Firstly I was trying wrong approaches
+ 					  - I tried union find but I could't figure out how to use
+ 					  it properly
+
+--------------------------------LEGO-------------------------------------------
+	
+	As far as I read the statement of the problem I thought of the fact that
+the problem will be solved using backtracking because we need to find out all
+the possibilities to assembly the pieces. So the problem can be separated
+into 2 pieces in order to get something easier to solve.
+	The first one is based on the fact that we need to find out all the
+possible combinations of N pieces of dimension K and the other one is about
+finding all the sums of maximum T pieces of the combination found previously
+and calculating the maximum number of resulted consecutive numbers.
+The first problem can be easily associated with another problem and that 
+problem is called combinations problem. 
+	The second problem that has to be solved is about finding all the possible
+sums so I decided to use a set for storing pairs (sum, nr_pieces). I iterate
+through each element from the list that was generated previously that is 
+called pieces and for each piece, I try to add of maximum T times. I do this
+both on its own account and at the other sums formed, with the condition that
+the number of pieces that I use in total not to pass T. 
+	The other part of the algorithm is based on the fact that we need to find
+the maximum of consecutive numbers in each solution we obtained.
+
+Complexity :	- Reading the data is O(1);
+				- The first part is based on a known problem so the complexity 
+				is O(Combinari(N, K))
+				- The second one is T * the number of combination we found
+				previously
+				- In total we will have T * [n! / (k! * (n - k)!)]
+
+Encountered Problems: - It took a lot of thinking time
+					  - Unordered_map of pairs doesen't have a has function so
+					  i found here something helpfull
+					  {https://www.geeksforgeeks.org/
+					  how-to-create-an-unordered_map-of-pairs-in-c/}
+
+--------------------------------RETEA------------------------------------------
+	
+	For this problem what comes to my mind was the fact that I have to find
+the maximum number of nodes that can be reached from each node in a 
+graph. So in order to do this, I thought that we can reach from a node to
+another only when they are in the same connected component. So the 
+solution is to use DFS. Firstly I was calculating for each node so based 
+on the time it was inefficient so I found that only some nodes need to 
+be recalculated that nodes are articulation points. 
+
+Complexity :	- The complexity to find the numbers of calls of a node will
+				take O(n)
+				- The complexity to find articulation points is  O(V + E)
+				- Total we have n * (V + E)
+
+Encountered Problems: - I can find how to optimize the code
+		 			  - First of all I was calculating for each of my points
+		 			  using MaximumVisit and then I thought of that only
+		 			  certain nodes have diffrent numbers of calls that will
+		 			  not be initiated (articulation points)
